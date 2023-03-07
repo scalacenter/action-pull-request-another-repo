@@ -45,4 +45,4 @@ This GitHub Action copies a folder from the current repository to a location in 
 
 
 ## Behavior Notes
-The action will create any destination paths if they don't exist. It will also overwrite existing files if they already exist in the locations being copied to. It will not delete the entire destination repository.
+The action will create any destination paths if they don't exist. It will also overwrite existing files if they already exist in the locations being copied to. Finally it will delete files that are missing from the source folder. It will not delete the entire destination repository.
