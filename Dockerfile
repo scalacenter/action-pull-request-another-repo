@@ -6,6 +6,8 @@ RUN wget -q  https://api.github.com/repos/cli/cli/releases/latest \
     && tar -xvzf gh*.tar.gz \
     && mv gh*/bin/gh /usr/local/bin/ \
     && rm -fr *
+   
+RUN apk add --no-cache rsync
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
