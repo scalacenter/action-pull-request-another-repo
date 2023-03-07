@@ -43,12 +43,21 @@ echo "Adding git commit"
 git add .
 if git status | grep -q "Changes to be committed"
 then
-  git commit --message "Update from https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+  COMMIT_MESSAGE="Update from https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+
+  if [ -z "$INPUT_PULL_REQUEST_MESSAGE" ]
+  then
+    PULL_REQUEST_MESSAGE=$COMMIT_MESSAGE
+  else
+    PULL_REQUEST_MESSAGE="$COMMIT_MESSAGE$(echo -e "\n\n$INPUT_PULL_REQUEST_MESSAGE")"
+  fi
+
+  git commit --message "$COMMIT_MESSAGE"
   echo "Pushing git commit"
   git push -u origin HEAD:$INPUT_DESTINATION_HEAD_BRANCH
   echo "Creating a pull request"
   gh pr create -t $INPUT_DESTINATION_HEAD_BRANCH \
-               -b $INPUT_DESTINATION_HEAD_BRANCH \
+               -b "$PULL_REQUEST_MESSAGE" \
                -B $INPUT_DESTINATION_BASE_BRANCH \
                -H $INPUT_DESTINATION_HEAD_BRANCH \
                   $PULL_REQUEST_REVIEWERS
